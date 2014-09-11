@@ -15,7 +15,7 @@ Entity::Entity() {
 }
 
 void Entity::loadTexture(std::string name) {
-    _tex = Loader::getInstance().loadImage("pixel_art.bmp");
+    _tex = Loader::getInstance().loadImage(name);
 }
 
 void Entity::moveTo(double x, double y) {

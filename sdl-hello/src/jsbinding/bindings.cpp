@@ -163,6 +163,7 @@ std::string loadData() {
     std::string result = "";
     std::string input = file::GetPath("myscript.js");
     std::ifstream openFile;
+    
     openFile.open(input.c_str(), std::ios::in);
     
     if (openFile.is_open()) {
@@ -170,6 +171,8 @@ std::string loadData() {
         {
             result += line;
         }
+        
+        std::cout << result << std::endl;
         
         openFile.close();
     } else {
