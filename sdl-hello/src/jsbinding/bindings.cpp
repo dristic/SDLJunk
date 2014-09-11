@@ -180,40 +180,19 @@ std::string loadData() {
     return result;
 }
 
-void doBindings(Game* game) {
-    JSGlobalContextRef ctx = JSGlobalContextCreate(NULL);
-    
-    JSObjectRef global = JSContextGetGlobalObject(ctx);
-    assert(global);
-    
-    JSClassRef consoleClass = ConsoleClass();
-    assert(consoleClass);
-    
-    JSObjectRef scriptObj = JSObjectMake(ctx, consoleClass, NULL);
-    assert(scriptObj);
-    
-    JSStringRef consoleName = JSStringCreateWithUTF8CString("console");
-    JSValueRef* except = 0;
-    JSObjectSetProperty(ctx, global, consoleName, scriptObj, kJSPropertyAttributeNone, except);
-    
-    JSClassRef engineClass = EngineClass();
-    assert(engineClass);
-    JSObjectRef engineObj = JSObjectMake(ctx, engineClass, reinterpret_cast<void*>(game));
-    assert(engineObj);
-    
-    JSStringRef engineName = JSStringCreateWithUTF8CString("engine");
-    JSObjectSetProperty(ctx, global, engineName, engineObj, kJSPropertyAttributeNone, NULL);
-    
+JSGlobalContextRef _ctx;
+
+void runCode() {
     std::string functionString = loadData();
     JSStringRef jsString = JSStringCreateWithUTF8CString(functionString.c_str());
     
     std::cout << "Executing JS code..." << std::endl;
     
     JSValueRef exception = NULL;
-    JSValueRef ref = JSEvaluateScript(ctx, jsString, NULL, NULL, 1, &exception);
+    JSValueRef ref = JSEvaluateScript(_ctx, jsString, NULL, NULL, 1, &exception);
     
     if (exception) {
-        JSStringRef str = JSValueToStringCopy(ctx, exception, NULL);
+        JSStringRef str = JSValueToStringCopy(_ctx, exception, NULL);
         
         char myStr[1024];
         JSStringGetUTF8CString(str, myStr, sizeof(char[1024]));
@@ -223,10 +202,37 @@ void doBindings(Game* game) {
         JSStringRelease(str);
     }
     
-    JSStringRef strRef = JSValueToStringCopy(ctx, ref, NULL);
+    JSStringRef strRef = JSValueToStringCopy(_ctx, ref, NULL);
     char otherStr[1024];
     JSStringGetUTF8CString(strRef, otherStr, sizeof(char[1024]));
     
     JSStringRelease(strRef);
+}
+
+void doBindings(Game* game) {
+    _ctx = JSGlobalContextCreate(NULL);
+    
+    JSObjectRef global = JSContextGetGlobalObject(_ctx);
+    assert(global);
+    
+    JSClassRef consoleClass = ConsoleClass();
+    assert(consoleClass);
+    
+    JSObjectRef scriptObj = JSObjectMake(_ctx, consoleClass, NULL);
+    assert(scriptObj);
+    
+    JSStringRef consoleName = JSStringCreateWithUTF8CString("console");
+    JSValueRef* except = 0;
+    JSObjectSetProperty(_ctx, global, consoleName, scriptObj, kJSPropertyAttributeNone, except);
+    
+    JSClassRef engineClass = EngineClass();
+    assert(engineClass);
+    JSObjectRef engineObj = JSObjectMake(_ctx, engineClass, reinterpret_cast<void*>(game));
+    assert(engineObj);
+    
+    JSStringRef engineName = JSStringCreateWithUTF8CString("engine");
+    JSObjectSetProperty(_ctx, global, engineName, engineObj, kJSPropertyAttributeNone, NULL);
+    
+    runCode();
 }
 

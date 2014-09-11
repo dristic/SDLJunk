@@ -23,6 +23,7 @@ JSClassRef EntityClass();
 static JSValueRef load_texture(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
 static JSValueRef move_to(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
 
+void runCode();
 void doBindings(Game*);
 
 #endif /* defined(__sdl_hello__bindings__) */

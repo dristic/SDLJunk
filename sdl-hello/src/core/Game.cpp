@@ -85,11 +85,16 @@ void Game::handleEvents() {
             case SDL_QUIT:
                 gameRunning = false;
                 break;
-            case SDL_KEYDOWN:
-                gameRunning = false;
-                break;
             default:
                 break;
+        }
+        
+        const UInt8* currentStates = SDL_GetKeyboardState(NULL);
+        
+        if (currentStates[SDL_SCANCODE_R]) {
+            runCode();
+        } else if (currentStates[SDL_SCANCODE_SPACE]) {
+            gameRunning = false;
         }
     }
 }
