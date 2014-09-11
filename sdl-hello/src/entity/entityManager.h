@@ -20,7 +20,7 @@ public:
     EntityManager();
     ~EntityManager();
     
-    void createEntity();
+    Entity* createEntity();
     void render(SDL_Renderer *renderer);
     
 private:

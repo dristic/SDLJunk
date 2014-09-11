@@ -48,9 +48,7 @@ static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObje
     if (exception && *exception)
         return JSValueMakeUndefined(ctx);
     
-    char otherStr[1024];
-    JSStringGetUTF8CString(temp, otherStr, sizeof(char[1024]));
-    printf("Got console log %s\n", otherStr);
+    printf("Got console log %s\n", (char*)JSStringGetCharactersPtr(temp));
     
     JSStringRelease(temp);
     
@@ -60,7 +58,7 @@ static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObje
 JSClassRef EngineClass()
 {
     static JSStaticFunction staticFunctions[] = {
-        { "createImage", create_image, kJSPropertyAttributeNone }
+        { "createEntity", create_entity, kJSPropertyAttributeNone }
     };
     
     static JSClassDefinition classDefinition = {
@@ -72,14 +70,41 @@ JSClassRef EngineClass()
     return engineClass;
 }
 
-/**
- * The callback from JavaScriptCore.  We told JSC to call this function
- * whenever it sees "console.log".
- */
-static JSValueRef create_image(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
+static JSValueRef create_entity(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-    std::cout << "CREATING" << std::endl;
     if (!JSValueIsObjectOfClass(ctx, thisObject, EngineClass()))
+        return JSValueMakeUndefined(ctx);
+    
+    Game* game = (Game*)JSObjectGetPrivate(thisObject);
+    assert(game);
+    
+    Entity* entity = game->entityManager->createEntity();
+    
+    JSClassRef entityClass = EntityClass();
+    JSObjectRef entityRef = JSObjectMake(ctx, entityClass, reinterpret_cast<void*>(entity));
+    
+    return entityRef;
+}
+
+JSClassRef EntityClass()
+{
+    static JSStaticFunction staticFunctions[] = {
+        { "loadTexture", load_texture, kJSClassAttributeNone },
+        { "moveTo", move_to, kJSClassAttributeNone }
+    };
+    
+    static JSClassDefinition classDefinition = {
+        0, kJSClassAttributeNone, "entity", 0, 0, staticFunctions,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+    
+    static JSClassRef entityClass = JSClassCreate(&classDefinition);
+    return entityClass;
+}
+
+static JSValueRef load_texture(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
+{
+    if (!JSValueIsObjectOfClass(ctx, thisObject, EntityClass()))
         return JSValueMakeUndefined(ctx);
     
     if (argumentCount < 1)
@@ -89,25 +114,51 @@ static JSValueRef create_image(JSContextRef ctx, JSObjectRef /*function*/, JSObj
     if (!JSValueIsString(ctx, arguments[0]))
         return JSValueMakeUndefined(ctx);
     
-    JSStringRef temp = JSValueToStringCopy (ctx, arguments[0], exception);
+    JSStringRef temp = JSValueToStringCopy(ctx, arguments[0], exception);
     if (exception && *exception)
         return JSValueMakeUndefined(ctx);
     
-    Game* game = (Game*)JSObjectGetPrivate(thisObject);
-    assert(game);
+    Entity* entity = (Entity*)JSObjectGetPrivate(thisObject);
+    assert(entity);
     
-    char otherStr[1024];
-    JSStringGetUTF8CString(temp, otherStr, sizeof(char[1024]));
-    printf("Engine create_image %s\n", otherStr);
+    char imageName[1024];
+    JSStringGetUTF8CString(temp, imageName, sizeof(char[1024]));
+    printf("Entity loadImage %s\n", imageName);
     
-    game->createEntity();
+    entity->loadTexture(imageName);
     
     JSStringRelease(temp);
     
     return JSValueMakeUndefined(ctx);
 }
 
-std::string loadData(Game* game) {
+static JSValueRef move_to(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
+{
+    if (!JSValueIsObjectOfClass(ctx, thisObject, EntityClass()))
+        return JSValueMakeUndefined(ctx);
+    
+    if (argumentCount < 2)
+        return JSValueMakeUndefined(ctx);
+    
+    double x = JSValueToNumber(ctx, arguments[0], exception);
+    if (exception && *exception)
+        return JSValueMakeUndefined(ctx);
+    
+    double y = JSValueToNumber(ctx, arguments[1], exception);
+    if (exception && *exception)
+        return JSValueMakeUndefined(ctx);
+    
+    Entity* entity = (Entity*)JSObjectGetPrivate(thisObject);
+    assert(entity);
+    
+    printf("Moving to %f, %f\n", x, y);
+    
+    entity->moveTo(x, y);
+    
+    return JSValueMakeUndefined(ctx);
+}
+
+std::string loadData() {
     std::string line;
     std::string result = "";
     std::string input = file::GetPath("myscript.js");
@@ -153,7 +204,7 @@ void doBindings(Game* game) {
     JSStringRef engineName = JSStringCreateWithUTF8CString("engine");
     JSObjectSetProperty(ctx, global, engineName, engineObj, kJSPropertyAttributeNone, NULL);
     
-    std::string functionString = loadData(game);
+    std::string functionString = loadData();
     JSStringRef jsString = JSStringCreateWithUTF8CString(functionString.c_str());
     
     std::cout << "Executing JS code..." << std::endl;

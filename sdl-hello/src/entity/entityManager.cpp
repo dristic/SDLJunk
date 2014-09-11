@@ -12,8 +12,10 @@ EntityManager::EntityManager() {
     
 }
 
-void EntityManager::createEntity() {
-    _entities.push_back(new Entity());
+Entity* EntityManager::createEntity() {
+    Entity* entity = new Entity();
+    _entities.push_back(entity);
+    return entity;
 }
 
 void EntityManager::render(SDL_Renderer *renderer) {

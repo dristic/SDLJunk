@@ -13,15 +13,15 @@
 #include <JavaScriptCore/JavaScriptCore.h>
 #include <JavaScriptCore/JSValueRef.h>
 
+JSClassRef ConsoleClass();
 static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t /*argumentCount*/, const JSValueRef[] /*arguments*/, JSValueRef* /*exception*/);
 
-JSClassRef ConsoleClass();
-
-static JSValueRef create_image(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
-
 JSClassRef EngineClass();
+static JSValueRef create_entity(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
 
-std::string loadData();
+JSClassRef EntityClass();
+static JSValueRef load_texture(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
+static JSValueRef move_to(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
 
 void doBindings(Game*);
 

@@ -1,7 +1,12 @@
 function main() {
     var foo = 'bar';
+    
     console.log(foo);
-    engine.createImage('pixel_art.bmp');
+    
+    var entity = engine.createEntity();
+    entity.loadTexture('pixel_art.bmp');
+    entity.moveTo(700, 300);
+    
     return foo;
 };
 

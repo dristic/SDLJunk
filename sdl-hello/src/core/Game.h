@@ -16,11 +16,12 @@
 
 class Game {
 public:
+    EntityManager* entityManager;
+    
     Game() {}
     ~Game() {}
     
     bool init (const char* title, int xpos, int ypos, int width, int height, int flags);
-    void createEntity();
     void render();
     void update();
     void handleEvents();
@@ -28,7 +29,6 @@ public:
     bool running();
     
 private:
-    EntityManager* _entityManager;
     bool gameRunning;
     SDL_Window* mainWindow;
     SDL_Renderer* mainRenderer;

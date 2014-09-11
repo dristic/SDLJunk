@@ -17,12 +17,19 @@ public:
     Entity();
     ~Entity();
     
+    void loadTexture(std::string name);
+    void moveTo(double x, double y);
     void render(SDL_Renderer *renderer);
     
 private:
     int _x;
     int _y;
-    SDL_Texture *_tex;
+    int _startX = 0;
+    int _startY = 0;
+    int _destX = 0;
+    int _destY = 0;
+    double _speed = 0.005;
+    SDL_Texture *_tex = 0;
 };
 
 #endif /* defined(__sdl_hello__entity__) */

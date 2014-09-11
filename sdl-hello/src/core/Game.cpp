@@ -40,7 +40,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     
     std::cout << "Game running!" << std::endl;
     
-    _entityManager = new EntityManager();
+    entityManager = new EntityManager();
     
     Loader::getInstance().initialize(mainRenderer, mainWindow);
     
@@ -48,20 +48,16 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
     gameRunning = true;
     
-    _entityManager->createEntity();
+    entityManager->createEntity();
     
     return true;
-}
-
-void Game::createEntity() {
-    _entityManager->createEntity();
 }
 
 void Game::render() {
     if (gameRunning) {
         SDL_RenderClear(mainRenderer);
         
-        _entityManager->render(mainRenderer);
+        entityManager->render(mainRenderer);
         
         SDL_RenderPresent(mainRenderer);
     }
