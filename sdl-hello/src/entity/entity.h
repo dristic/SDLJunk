@@ -18,6 +18,11 @@ public:
     ~Entity();
     
     void render(SDL_Renderer *renderer);
+    
+private:
+    int _x;
+    int _y;
+    SDL_Texture *_tex;
 };
 
 #endif /* defined(__sdl_hello__entity__) */

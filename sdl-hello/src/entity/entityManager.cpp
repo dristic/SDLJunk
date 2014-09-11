@@ -17,9 +17,17 @@ void EntityManager::createEntity() {
 }
 
 void EntityManager::render(SDL_Renderer *renderer) {
-    
+    int i;
+    for (i = 0; i < _entities.size(); i++) {
+        _entities[i]->render(renderer);
+    }
 }
 
 EntityManager::~EntityManager() {
+    int i;
+    for (i = 0; i < _entities.size(); i++) {
+        _entities[i]->~Entity();
+    }
     
+    _entities.resize(0);
 }

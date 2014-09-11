@@ -15,6 +15,7 @@
 		372E172D19BFCA5E00BA5861 /* myscript.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 372E172B19BFCA0300BA5861 /* myscript.js */; };
 		372E173119C0C23400BA5861 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E172F19C0C23400BA5861 /* file.cpp */; };
 		372E173419C1461400BA5861 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E173219C1461400BA5861 /* entity.cpp */; };
+		372E173719C149F700BA5861 /* loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E173519C149F700BA5861 /* loader.cpp */; };
 		6A1C41981996EFD6006FE4E7 /* abstractEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C41961996EFD6006FE4E7 /* abstractEntity.cpp */; };
 		6A1C419B1996F08E006FE4E7 /* entityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C41991996F08E006FE4E7 /* entityManager.cpp */; };
 		6AC345621996B5E3004BC3C1 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AC345601996B5E3004BC3C1 /* Game.cpp */; };
@@ -59,6 +60,8 @@
 		372E173019C0C23400BA5861 /* file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file.h; path = file/file.h; sourceTree = "<group>"; };
 		372E173219C1461400BA5861 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		372E173319C1461400BA5861 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
+		372E173519C149F700BA5861 /* loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loader.cpp; sourceTree = "<group>"; };
+		372E173619C149F700BA5861 /* loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loader.h; sourceTree = "<group>"; };
 		6A1C41961996EFD6006FE4E7 /* abstractEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abstractEntity.cpp; sourceTree = "<group>"; };
 		6A1C41971996EFD6006FE4E7 /* abstractEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractEntity.h; sourceTree = "<group>"; };
 		6A1C41991996F08E006FE4E7 /* entityManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entityManager.cpp; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 			children = (
 				6AC345601996B5E3004BC3C1 /* Game.cpp */,
 				6AC345611996B5E3004BC3C1 /* Game.h */,
+				372E173519C149F700BA5861 /* loader.cpp */,
+				372E173619C149F700BA5861 /* loader.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				372E173419C1461400BA5861 /* entity.cpp in Sources */,
+				372E173719C149F700BA5861 /* loader.cpp in Sources */,
 				6AC345621996B5E3004BC3C1 /* Game.cpp in Sources */,
 				372E172C19BFCA0300BA5861 /* myscript.js in Sources */,
 				372E173119C0C23400BA5861 /* file.cpp in Sources */,

@@ -9,14 +9,13 @@
 #include "Game.h"
 #include "bindings.h"
 #include "file.h"
+#include "loader.h"
 #include <SDL2/SDL.h>
 #include <mach-o/dyld.h>
 
 static const uint8_t SUCCESS = 0;
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, int flags) {
-    _entityManager = new EntityManager();
-    
     if(SDL_Init(SDL_INIT_EVERYTHING) != SUCCESS) {
         std::cout << "SDL_Init failure! " << SDL_GetError() << std::endl;
         return false;
@@ -41,54 +40,29 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     
     std::cout << "Game running!" << std::endl;
     
+    _entityManager = new EntityManager();
+    
+    Loader::getInstance().initialize(mainRenderer, mainWindow);
+    
     doBindings(this);
 
     gameRunning = true;
     
+    _entityManager->createEntity();
+    
     return true;
 }
 
-void Game::loadImage(std::string name) {
-    std::string imagePath = file::GetPath(name);
-    
-    std::cout << "Location is" << imagePath.c_str() << std::endl;
-    
-    SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
-    if (!bmp) {
-        std::cout << "Failed to create image. " << SDL_GetError() << std::endl;
-        SDL_DestroyRenderer(mainRenderer);
-        SDL_DestroyWindow(mainWindow);
-        SDL_Quit();
-    }
-
-    mainTexture = SDL_CreateTextureFromSurface(mainRenderer, bmp);
-    SDL_FreeSurface(bmp);
-    if (!mainTexture) {
-        std::cout << "Failed to create texture. " << SDL_GetError() << std::endl;
-        SDL_DestroyRenderer(mainRenderer);
-        SDL_DestroyWindow(mainWindow);
-        SDL_Quit();
-    }
-    
-    std::cout << "Created texture successfully." << std::endl;
-}
-
-void Game::renderTexture(SDL_Texture *tex, SDL_Renderer *renderer, int x, int y) {
-    SDL_Rect rect;
-    rect.x = x;
-    rect.y = y;
-    SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
-    SDL_RenderCopy(renderer, tex, NULL, &rect);
+void Game::createEntity() {
+    _entityManager->createEntity();
 }
 
 void Game::render() {
     if (gameRunning) {
         SDL_RenderClear(mainRenderer);
-    
-        if (mainTexture) {
-            renderTexture(mainTexture, mainRenderer, m_x, m_y);
-        }
-    
+        
+        _entityManager->render(mainRenderer);
+        
         SDL_RenderPresent(mainRenderer);
     }
 }

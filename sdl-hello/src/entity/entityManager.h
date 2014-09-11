@@ -16,14 +16,15 @@
 #include "entity.h"
 
 class EntityManager {
-    std::vector<Entity*> _entities;
-    
 public:
     EntityManager();
     ~EntityManager();
     
     void createEntity();
     void render(SDL_Renderer *renderer);
+    
+private:
+    std::vector<Entity*> _entities;
 };
 
 #endif /* defined(__sdl_hello__entityManager__) */

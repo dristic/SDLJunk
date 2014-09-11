@@ -100,7 +100,7 @@ static JSValueRef create_image(JSContextRef ctx, JSObjectRef /*function*/, JSObj
     JSStringGetUTF8CString(temp, otherStr, sizeof(char[1024]));
     printf("Engine create_image %s\n", otherStr);
     
-    game->loadImage(std::string(otherStr));
+    game->createEntity();
     
     JSStringRelease(temp);
     
