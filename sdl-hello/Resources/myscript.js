@@ -11,6 +11,10 @@ function main() {
     entityTwo.loadTexture('pixel_art.bmp');
     entityTwo.moveTo(800, 50);
     
+    engine.onMouseDown(function (x, y) {
+        entityTwo.moveTo(x, y);
+    });
+    
     return foo;
 };
 

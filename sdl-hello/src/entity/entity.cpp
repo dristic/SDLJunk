@@ -30,8 +30,8 @@ void Entity::render(SDL_Renderer *renderer) {
         if (_x != _destX) _x += (_destX - _startX) * _speed;
         if (_y != _destY) _y += (_destY - _startY) * _speed;
         
-        if (_destX - _x < 3) _x = _destX;
-        if (_destY - _y < 3) _y = _destY;
+        if (_destX - _x < 2 && _destX - _x > -2) _x = _destX;
+        if (_destY - _y < 2 && _destY - _y > -2) _y = _destY;
         
         SDL_Rect rect;
         rect.x = _x;

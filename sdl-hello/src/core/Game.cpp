@@ -78,6 +78,12 @@ void Game::handleEvents() {
     SDL_Event event;
     if (SDL_PollEvent(&event)) {
         switch (event.type) {
+            case SDL_MOUSEMOTION:
+                SDL_GetMouseState(&mouseX, &mouseY);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                jsbinding::mouseClick(engine->getContext(), mouseX, mouseY);
+                break;
             case SDL_QUIT:
                 gameRunning = false;
                 break;

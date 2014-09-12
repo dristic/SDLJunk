@@ -21,9 +21,6 @@ static JSClassRef entityClass = NULL;
  */
 static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-//    if (!JSValueIsObjectOfClass(ctx, thisObject, ConsoleClass()))
-//        return JSValueMakeUndefined(ctx);
-    
     if (argumentCount < 1)
         return JSValueMakeUndefined(ctx);
     
@@ -42,11 +39,31 @@ static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObje
     return JSValueMakeUndefined(ctx);
 }
 
+static JSValueRef on_mouse_down(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception) {
+    if (argumentCount < 1)
+        return JSValueMakeUndefined(ctx);
+    
+    JSValueProtect(ctx, arguments[0]);
+    callback = JSValueToObject(ctx, arguments[0], NULL);
+    
+    return JSValueMakeUndefined(ctx);
+}
+
+void jsbinding::mouseClick(JSContextRef ctx, int x, int y) {
+    JSValueRef xRef = JSValueMakeNumber(ctx, (double)x);
+    JSValueRef yRef = JSValueMakeNumber(ctx, (double)y);
+    
+    const JSValueRef args[] = { xRef, yRef };
+    
+    if (JSObjectIsFunction(ctx, callback)) {
+        JSObjectCallAsFunction(ctx, callback, NULL, 2, args, NULL);
+    } else {
+        std::cout << "No callback defined." << std::endl;
+    }
+}
+
 static JSValueRef create_entity(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-//    if (!JSValueIsObjectOfClass(ctx, thisObject, EngineClass()))
-//        return JSValueMakeUndefined(ctx);
-    
     Game* game = (Game*)JSObjectGetPrivate(thisObject);
     assert(game);
     
@@ -147,7 +164,8 @@ JSEngine* jsbinding::createEngine(Game *game) {
     
     // Create engine class
     const JSStaticFunction engineFunctions[] = {
-        { "createEntity", create_entity, kJSPropertyAttributeNone }
+        { "createEntity", create_entity, kJSPropertyAttributeNone },
+        { "onMouseDown", on_mouse_down, kJSPropertyAttributeNone }
     };
     engine->createGlobal("engine", engineFunctions, reinterpret_cast<void*>(game));
     

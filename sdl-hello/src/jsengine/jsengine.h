@@ -17,6 +17,7 @@ public:
     JSEngine();
     ~JSEngine();
     
+    JSContextRef getContext();
     std::string evaluateScript(std::string source);
     JSClassRef createClass(std::string name, const JSStaticFunction* functions);
     bool createGlobal(std::string name, const JSStaticFunction* functions, void* data);

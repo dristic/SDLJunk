@@ -16,6 +16,9 @@
 
 namespace jsbinding {
     JSEngine* createEngine(Game *game);
+    void mouseClick(JSContextRef ctx, int x, int y);
 }
+
+static JSObjectRef callback;
 
 #endif /* defined(__sdl_hello__bindings__) */

@@ -15,6 +15,10 @@ JSEngine::JSEngine() {
     assert(_global);
 }
 
+JSContextRef JSEngine::getContext() {
+    return _ctx;
+}
+
 JSClassRef JSEngine::createClass(std::string name, const JSStaticFunction* functions) {
     JSClassDefinition classDefinition = {
         0, kJSClassAttributeNone, name.c_str(), 0, 0, functions,

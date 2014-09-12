@@ -18,6 +18,7 @@
 class Game {
 public:
     EntityManager* entityManager;
+    int mouseX, mouseY;
     
     Game() {}
     ~Game() {}
