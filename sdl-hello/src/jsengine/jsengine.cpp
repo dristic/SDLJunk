@@ -15,7 +15,7 @@ JSEngine::JSEngine() {
     assert(_global);
 }
 
-JSClassRef JSEngine::createClass(std::string name, JSStaticFunction* functions) {
+JSClassRef JSEngine::createClass(std::string name, const JSStaticFunction* functions) {
     JSClassDefinition classDefinition = {
         0, kJSClassAttributeNone, name.c_str(), 0, 0, functions,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -26,7 +26,7 @@ JSClassRef JSEngine::createClass(std::string name, JSStaticFunction* functions) 
     return classRef;
 }
 
-bool JSEngine::createGlobal(std::string name, JSStaticFunction* functions, void* data) {
+bool JSEngine::createGlobal(std::string name, const JSStaticFunction* functions, void* data) {
     JSClassRef classRef = this->createClass(name, functions);
     
     JSObjectRef classObj = JSObjectMake(_ctx, classRef, data);

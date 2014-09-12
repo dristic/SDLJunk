@@ -140,19 +140,19 @@ JSEngine* jsbinding::createEngine(Game *game) {
     JSEngine* engine = new JSEngine();
     
     // Create console class
-    static JSStaticFunction consoleFunctions[] = {
+    const JSStaticFunction consoleFunctions[] = {
         { "log", console_log, kJSPropertyAttributeNone }
     };
     engine->createGlobal("console", consoleFunctions, NULL);
     
     // Create engine class
-    static JSStaticFunction engineFunctions[] = {
+    const JSStaticFunction engineFunctions[] = {
         { "createEntity", create_entity, kJSPropertyAttributeNone }
     };
     engine->createGlobal("engine", engineFunctions, reinterpret_cast<void*>(game));
     
     // Create entity class
-    static JSStaticFunction entityFunctions[] = {
+    const JSStaticFunction entityFunctions[] = {
         { "loadTexture", load_texture, kJSClassAttributeNone },
         { "moveTo", move_to, kJSClassAttributeNone }
     };

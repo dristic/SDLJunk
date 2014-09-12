@@ -18,8 +18,8 @@ public:
     ~JSEngine();
     
     std::string evaluateScript(std::string source);
-    JSClassRef createClass(std::string name, JSStaticFunction* functions);
-    bool createGlobal(std::string name, JSStaticFunction* functions, void* data);
+    JSClassRef createClass(std::string name, const JSStaticFunction* functions);
+    bool createGlobal(std::string name, const JSStaticFunction* functions, void* data);
     
 private:
     JSGlobalContextRef _ctx;
