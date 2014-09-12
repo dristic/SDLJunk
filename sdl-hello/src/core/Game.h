@@ -13,6 +13,7 @@
 #include <SDL2/SDL.h>
 
 #include "entityManager.h"
+#include "jsengine.h"
 
 class Game {
 public:
@@ -30,6 +31,7 @@ public:
     
 private:
     bool gameRunning;
+    JSEngine* engine;
     SDL_Window* mainWindow;
     SDL_Renderer* mainRenderer;
 };

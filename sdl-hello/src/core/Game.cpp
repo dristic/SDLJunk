@@ -41,14 +41,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     std::cout << "Game running!" << std::endl;
     
     entityManager = new EntityManager();
-    
-    Loader::getInstance().initialize(mainRenderer, mainWindow);
-    
-    doBindings(this);
+    Loader::getInstance().initialize(mainRenderer);
+    engine = jsbinding::createEngine(this);
 
     gameRunning = true;
-    
-    entityManager->createEntity();
     
     return true;
 }
@@ -92,7 +88,7 @@ void Game::handleEvents() {
         const UInt8* currentStates = SDL_GetKeyboardState(NULL);
         
         if (currentStates[SDL_SCANCODE_R]) {
-            runCode();
+            
         } else if (currentStates[SDL_SCANCODE_SPACE]) {
             gameRunning = false;
         }

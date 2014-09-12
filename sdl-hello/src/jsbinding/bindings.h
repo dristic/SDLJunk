@@ -10,20 +10,12 @@
 #define __sdl_hello__bindings__
 
 #include "Game.h"
+#include "jsengine.h"
 #include <JavaScriptCore/JavaScriptCore.h>
 #include <JavaScriptCore/JSValueRef.h>
 
-JSClassRef ConsoleClass();
-static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t /*argumentCount*/, const JSValueRef[] /*arguments*/, JSValueRef* /*exception*/);
-
-JSClassRef EngineClass();
-static JSValueRef create_entity(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
-
-JSClassRef EntityClass();
-static JSValueRef load_texture(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
-static JSValueRef move_to(JSContextRef ctx, JSObjectRef, JSObjectRef thisObject, size_t, const JSValueRef[], JSValueRef*);
-
-void runCode();
-void doBindings(Game*);
+namespace jsbinding {
+    JSEngine* createEngine(Game *game);
+}
 
 #endif /* defined(__sdl_hello__bindings__) */

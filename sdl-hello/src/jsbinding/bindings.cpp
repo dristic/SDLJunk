@@ -13,20 +13,7 @@
 #include <fstream>
 #include <string>
 
-JSClassRef ConsoleClass()
-{
-    static JSStaticFunction staticFunctions[] = {
-        { "log", console_log, kJSPropertyAttributeNone }
-    };
-    
-    static JSClassDefinition classDefinition = {
-        0, kJSClassAttributeNone, "console", 0, 0, staticFunctions,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-    
-    static JSClassRef consoleClass = JSClassCreate(&classDefinition);
-    return consoleClass;
-}
+static JSClassRef entityClass = NULL;
 
 /**
  * The callback from JavaScriptCore.  We told JSC to call this function
@@ -34,8 +21,8 @@ JSClassRef ConsoleClass()
  */
 static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-    if (!JSValueIsObjectOfClass(ctx, thisObject, ConsoleClass()))
-        return JSValueMakeUndefined(ctx);
+//    if (!JSValueIsObjectOfClass(ctx, thisObject, ConsoleClass()))
+//        return JSValueMakeUndefined(ctx);
     
     if (argumentCount < 1)
         return JSValueMakeUndefined(ctx);
@@ -55,56 +42,24 @@ static JSValueRef console_log(JSContextRef ctx, JSObjectRef /*function*/, JSObje
     return JSValueMakeUndefined(ctx);
 }
 
-JSClassRef EngineClass()
-{
-    static JSStaticFunction staticFunctions[] = {
-        { "createEntity", create_entity, kJSPropertyAttributeNone }
-    };
-    
-    static JSClassDefinition classDefinition = {
-        0, kJSClassAttributeNone, "engine", 0, 0, staticFunctions,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-    
-    static JSClassRef engineClass = JSClassCreate(&classDefinition);
-    return engineClass;
-}
-
 static JSValueRef create_entity(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-    if (!JSValueIsObjectOfClass(ctx, thisObject, EngineClass()))
-        return JSValueMakeUndefined(ctx);
+//    if (!JSValueIsObjectOfClass(ctx, thisObject, EngineClass()))
+//        return JSValueMakeUndefined(ctx);
     
     Game* game = (Game*)JSObjectGetPrivate(thisObject);
     assert(game);
     
     Entity* entity = game->entityManager->createEntity();
     
-    JSClassRef entityClass = EntityClass();
     JSObjectRef entityRef = JSObjectMake(ctx, entityClass, reinterpret_cast<void*>(entity));
     
     return entityRef;
 }
 
-JSClassRef EntityClass()
-{
-    static JSStaticFunction staticFunctions[] = {
-        { "loadTexture", load_texture, kJSClassAttributeNone },
-        { "moveTo", move_to, kJSClassAttributeNone }
-    };
-    
-    static JSClassDefinition classDefinition = {
-        0, kJSClassAttributeNone, "entity", 0, 0, staticFunctions,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-    
-    static JSClassRef entityClass = JSClassCreate(&classDefinition);
-    return entityClass;
-}
-
 static JSValueRef load_texture(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-    if (!JSValueIsObjectOfClass(ctx, thisObject, EntityClass()))
+    if (!JSValueIsObjectOfClass(ctx, thisObject, entityClass))
         return JSValueMakeUndefined(ctx);
     
     if (argumentCount < 1)
@@ -134,7 +89,7 @@ static JSValueRef load_texture(JSContextRef ctx, JSObjectRef /*function*/, JSObj
 
 static JSValueRef move_to(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRef thisObject, size_t argumentCount, const JSValueRef* arguments, JSValueRef* exception)
 {
-    if (!JSValueIsObjectOfClass(ctx, thisObject, EntityClass()))
+    if (!JSValueIsObjectOfClass(ctx, thisObject, entityClass))
         return JSValueMakeUndefined(ctx);
     
     if (argumentCount < 2)
@@ -158,7 +113,7 @@ static JSValueRef move_to(JSContextRef ctx, JSObjectRef /*function*/, JSObjectRe
     return JSValueMakeUndefined(ctx);
 }
 
-std::string loadData() {
+std::string loadJavaScript() {
     std::string line;
     std::string result = "";
     std::string input = file::GetPath("myscript.js");
@@ -172,8 +127,6 @@ std::string loadData() {
             result += line;
         }
         
-        std::cout << result << std::endl;
-        
         openFile.close();
     } else {
         std::cout << "[ERROR] Unable to open file." << std::endl;
@@ -183,59 +136,31 @@ std::string loadData() {
     return result;
 }
 
-JSGlobalContextRef _ctx;
-
-void runCode() {
-    std::string functionString = loadData();
-    JSStringRef jsString = JSStringCreateWithUTF8CString(functionString.c_str());
+JSEngine* jsbinding::createEngine(Game *game) {
+    JSEngine* engine = new JSEngine();
     
-    std::cout << "Executing JS code..." << std::endl;
+    // Create console class
+    static JSStaticFunction consoleFunctions[] = {
+        { "log", console_log, kJSPropertyAttributeNone }
+    };
+    engine->createGlobal("console", consoleFunctions, NULL);
     
-    JSValueRef exception = NULL;
-    JSValueRef ref = JSEvaluateScript(_ctx, jsString, NULL, NULL, 1, &exception);
+    // Create engine class
+    static JSStaticFunction engineFunctions[] = {
+        { "createEntity", create_entity, kJSPropertyAttributeNone }
+    };
+    engine->createGlobal("engine", engineFunctions, reinterpret_cast<void*>(game));
     
-    if (exception) {
-        JSStringRef str = JSValueToStringCopy(_ctx, exception, NULL);
-        
-        char myStr[1024];
-        JSStringGetUTF8CString(str, myStr, sizeof(char[1024]));
-        
-        std::cout << "Error hit" << myStr << std::endl;
-        
-        JSStringRelease(str);
-    }
+    // Create entity class
+    static JSStaticFunction entityFunctions[] = {
+        { "loadTexture", load_texture, kJSClassAttributeNone },
+        { "moveTo", move_to, kJSClassAttributeNone }
+    };
     
-    JSStringRef strRef = JSValueToStringCopy(_ctx, ref, NULL);
-    char otherStr[1024];
-    JSStringGetUTF8CString(strRef, otherStr, sizeof(char[1024]));
+    entityClass = engine->createClass("entity", entityFunctions);
     
-    JSStringRelease(strRef);
+    // Finally, run our script file
+    engine->evaluateScript(loadJavaScript());
+    
+    return engine;
 }
-
-void doBindings(Game* game) {
-    _ctx = JSGlobalContextCreate(NULL);
-    
-    JSObjectRef global = JSContextGetGlobalObject(_ctx);
-    assert(global);
-    
-    JSClassRef consoleClass = ConsoleClass();
-    assert(consoleClass);
-    
-    JSObjectRef scriptObj = JSObjectMake(_ctx, consoleClass, NULL);
-    assert(scriptObj);
-    
-    JSStringRef consoleName = JSStringCreateWithUTF8CString("console");
-    JSValueRef* except = 0;
-    JSObjectSetProperty(_ctx, global, consoleName, scriptObj, kJSPropertyAttributeNone, except);
-    
-    JSClassRef engineClass = EngineClass();
-    assert(engineClass);
-    JSObjectRef engineObj = JSObjectMake(_ctx, engineClass, reinterpret_cast<void*>(game));
-    assert(engineObj);
-    
-    JSStringRef engineName = JSStringCreateWithUTF8CString("engine");
-    JSObjectSetProperty(_ctx, global, engineName, engineObj, kJSPropertyAttributeNone, NULL);
-    
-    runCode();
-}
-

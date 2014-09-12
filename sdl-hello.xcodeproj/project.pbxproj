@@ -16,6 +16,7 @@
 		372E173119C0C23400BA5861 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E172F19C0C23400BA5861 /* file.cpp */; };
 		372E173419C1461400BA5861 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E173219C1461400BA5861 /* entity.cpp */; };
 		372E173719C149F700BA5861 /* loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E173519C149F700BA5861 /* loader.cpp */; };
+		37528A2419C2B35900C929F2 /* jsengine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37528A2219C2B35900C929F2 /* jsengine.cpp */; };
 		6A1C41981996EFD6006FE4E7 /* abstractEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C41961996EFD6006FE4E7 /* abstractEntity.cpp */; };
 		6A1C419B1996F08E006FE4E7 /* entityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C41991996F08E006FE4E7 /* entityManager.cpp */; };
 		6AC345621996B5E3004BC3C1 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AC345601996B5E3004BC3C1 /* Game.cpp */; };
@@ -62,6 +63,8 @@
 		372E173319C1461400BA5861 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		372E173519C149F700BA5861 /* loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loader.cpp; sourceTree = "<group>"; };
 		372E173619C149F700BA5861 /* loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loader.h; sourceTree = "<group>"; };
+		37528A2219C2B35900C929F2 /* jsengine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsengine.cpp; path = jsengine/jsengine.cpp; sourceTree = "<group>"; };
+		37528A2319C2B35900C929F2 /* jsengine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsengine.h; path = jsengine/jsengine.h; sourceTree = "<group>"; };
 		6A1C41961996EFD6006FE4E7 /* abstractEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abstractEntity.cpp; sourceTree = "<group>"; };
 		6A1C41971996EFD6006FE4E7 /* abstractEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractEntity.h; sourceTree = "<group>"; };
 		6A1C41991996F08E006FE4E7 /* entityManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entityManager.cpp; sourceTree = "<group>"; };
@@ -115,6 +118,15 @@
 			name = file;
 			sourceTree = "<group>";
 		};
+		37528A2119C2B32400C929F2 /* jsengine */ = {
+			isa = PBXGroup;
+			children = (
+				37528A2219C2B35900C929F2 /* jsengine.cpp */,
+				37528A2319C2B35900C929F2 /* jsengine.h */,
+			);
+			name = jsengine;
+			sourceTree = "<group>";
+		};
 		6A1C41951996EFCA006FE4E7 /* entity */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +172,7 @@
 		6AF2271C1995F83A00E87C90 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				37528A2119C2B32400C929F2 /* jsengine */,
 				372E172E19C0C20D00BA5861 /* file */,
 				372E172219BECB2800BA5861 /* jsbinding */,
 				6A1C41951996EFCA006FE4E7 /* entity */,
@@ -239,6 +252,7 @@
 				6A1C41981996EFD6006FE4E7 /* abstractEntity.cpp in Sources */,
 				6A1C419B1996F08E006FE4E7 /* entityManager.cpp in Sources */,
 				6AF227101995EB8000E87C90 /* main.cpp in Sources */,
+				37528A2419C2B35900C929F2 /* jsengine.cpp in Sources */,
 				372E172519BECB5100BA5861 /* bindings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

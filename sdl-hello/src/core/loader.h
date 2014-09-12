@@ -19,7 +19,7 @@ public:
         return instance;
     }
     
-    void initialize(SDL_Renderer *renderer, SDL_Window *window);
+    void initialize(SDL_Renderer* renderer);
     SDL_Texture* loadImage(std::string name);
     
 private:
@@ -27,8 +27,8 @@ private:
     Loader(Loader const&);
     void operator=(Loader const&);
     
+    // This is owned by Game and should not be destroyed!
     SDL_Renderer* _renderer;
-    SDL_Window* _window;
 };
 
 #endif /* defined(__sdl_hello__loader__) */
