@@ -27,18 +27,22 @@ void Entity::moveTo(double x, double y) {
 
 void Entity::render(SDL_Renderer *renderer) {
     if (_tex) {
-        if (_x != _destX) _x += (_destX - _startX) * _speed;
-        if (_y != _destY) _y += (_destY - _startY) * _speed;
-        
-        if (_destX - _x < 2 && _destX - _x > -2) _x = _destX;
-        if (_destY - _y < 2 && _destY - _y > -2) _y = _destY;
-        
         SDL_Rect rect;
         rect.x = _x;
         rect.y = _y;
         SDL_QueryTexture(_tex, NULL, NULL, &rect.w, &rect.h);
         SDL_RenderCopy(renderer, _tex, NULL, &rect);
     }
+}
+
+void Entity::update(double delta) {
+    if (_x < _destX) _x += _speed * delta;
+    if (_x > _destX) _x -= _speed * delta;
+    if (_y < _destY) _y += _speed * delta;
+    if (_y > _destY) _y -= _speed * delta;
+    
+    if (_destX - _x < 2 && _destX - _x > -2) _x = _destX;
+    if (_destY - _y < 2 && _destY - _y > -2) _y = _destY;
 }
 
 Entity::~Entity() {

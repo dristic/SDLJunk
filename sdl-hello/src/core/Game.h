@@ -35,6 +35,8 @@ private:
     JSEngine* engine;
     SDL_Window* mainWindow;
     SDL_Renderer* mainRenderer;
+    
+    Uint32 lastTime = 0;
 };
 
 #endif /* defined(__sdl_hello__Game__) */

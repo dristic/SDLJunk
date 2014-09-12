@@ -22,6 +22,7 @@ public:
     
     Entity* createEntity();
     void render(SDL_Renderer *renderer);
+    void update(double delta);
     
 private:
     std::vector<Entity*> _entities;

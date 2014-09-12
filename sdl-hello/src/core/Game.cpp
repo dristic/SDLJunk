@@ -64,7 +64,11 @@ bool Game::running() {
 }
 
 void Game::update() {
-
+    Uint32 currentTime = SDL_GetTicks();
+    double delta = (currentTime - lastTime) / 1000.0;
+    lastTime = currentTime;
+    
+    entityManager->update(delta);
 }
 
 void Game::clean() {

@@ -20,6 +20,7 @@ public:
     void loadTexture(std::string name);
     void moveTo(double x, double y);
     void render(SDL_Renderer *renderer);
+    void update(double delta);
     
 private:
     int _x;
@@ -28,7 +29,7 @@ private:
     int _startY = 0;
     int _destX = 0;
     int _destY = 0;
-    double _speed = 0.005;
+    double _speed = 500;
     SDL_Texture *_tex = 0;
 };
 

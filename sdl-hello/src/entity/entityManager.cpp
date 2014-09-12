@@ -25,6 +25,13 @@ void EntityManager::render(SDL_Renderer *renderer) {
     }
 }
 
+void EntityManager::update(double delta) {
+    int i;
+    for (i = 0; i < _entities.size(); i++) {
+        _entities[i]->update(delta);
+    }
+}
+
 EntityManager::~EntityManager() {
     int i;
     for (i = 0; i < _entities.size(); i++) {
